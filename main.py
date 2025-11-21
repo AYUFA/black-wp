@@ -3,10 +3,28 @@ from constants import COLORS, FONTS
 from monitors import get_monitors
 from ui_components import ModernButton, MonitorCard
 from locales import TRANSLATIONS
+import os
+import sys
 
 class BlackScreenApp:
+
+    # exe化された時にリソースの絶対パスを取得する関数
+    @staticmethod
+    def resource_path(relative_path):
+        try:
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+        return os.path.join(base_path, relative_path)
+
     def __init__(self):
         self.root = tk.Tk()
+        # ウィンドウのアイコンを設定（resource_path関数を使う）
+        # icon.icoが存在するか確認してから設定
+        try:
+            self.root.iconbitmap(self.resource_path("icon.ico"))
+        except:
+            pass # アイコンがなくても起動するようにする
         self.monitors = get_monitors()
         self.monitor_vars = []
         self.black_windows = []
